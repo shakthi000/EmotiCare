@@ -1,0 +1,109 @@
+.step3-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step3-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step3-back-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.step3-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+  text-align: center;
+}
+
+.step3-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.step3-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step3-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step3-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 20px;
+}
+
+.step3-scroll {
+  max-height: 180px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.step3-age-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: 500;
+  color: #999;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.step3-age-btn.selected {
+  background-color: #975dbd;
+  color: #fff;
+  font-weight: 700;
+  font-size: 26px;
+  padding: 12px 24px;
+  border-radius: 999px;
+}
+
+.step3-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step3-next-button:hover {
+  background-color: #8446b5;
+}

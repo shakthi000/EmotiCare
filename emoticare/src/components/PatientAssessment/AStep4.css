@@ -1,0 +1,144 @@
+.step4-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step4-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step4-back-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.step4-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+  text-align: center;
+}
+
+.step4-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.step4-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step4-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step4-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+}
+
+.unit-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.unit-toggle button {
+  padding: 10px 20px;
+  border: 2px solid #975dbd;
+  background: #fff;
+  color: #975dbd;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.unit-toggle .active {
+  background: #975dbd;
+  color: #fff;
+}
+
+.weight-scroll {
+  display: flex;
+  overflow-x: scroll;
+  gap: 12px;
+  margin: 16px 0;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.weight-option {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #aaa;
+  font-weight: 500;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.weight-option.selected {
+  font-size: 26px;
+  font-weight: 700;
+  color: #975dbd;
+}
+
+.weight-display {
+  font-size: 48px;
+  font-weight: 700;
+  color: #975dbd;
+  margin: 16px 0;
+}
+
+.weight-display .unit {
+  font-size: 20px;
+  font-weight: 600;
+  margin-left: 6px;
+  color: #975dbd;
+}
+
+.step4-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step4-next-button:hover {
+  background-color: #8446b5;
+}

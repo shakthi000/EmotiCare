@@ -1,0 +1,129 @@
+.step9-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step9-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step9-back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.step9-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  height: 700px;
+  width: 100%;
+  max-width: 550px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+}
+
+.step9-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.step9-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step9-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step9-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.step9-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.step9-option.selected {
+  background-color: #975dbd;
+  color: white;
+  border-color: #975dbd;
+}
+
+.step9-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step9-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.step9-option {
+  padding: 20px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background: #fff;
+  color: #4f3422;
+  font-weight: 600;
+  font-size: 18px;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-align: center;
+  margin: 20px 0;
+  width: 200px;
+  height: 200px;
+  display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.step9-option-img {
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+    margin-right: 10px;
+    margin-bottom: 20px;
+  
+}
+
+.step9-option.selected {
+  background-color: #975dbd;
+  border-color: #975dbd;
+}

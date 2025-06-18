@@ -1,0 +1,122 @@
+.step5-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step5-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step5-back-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.step5-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+  text-align: center;
+}
+
+.step5-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.step5-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step5-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step5-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 16px;
+}
+
+.step5-selected-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #975dbd;
+  margin-bottom: 12px;
+}
+
+.step5-emoji-display .big-emoji {
+  font-size: 60px;
+  margin-bottom: 12px;
+}
+
+.step5-arc {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to right, #ff6b6b, #f6c343, #58d68d, #9b59b6);
+  border-radius: 40px;
+  padding: 14px 12px;
+  margin-bottom: 28px;
+}
+
+.arc-emoji {
+  background: white;
+  border: none;
+  font-size: 22px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.arc-emoji.selected {
+  transform: scale(1.3);
+  background-color: #f2e7fa;
+}
+
+.step5-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step5-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.step5-next-button:hover:not(:disabled) {
+  background-color: #8446b5;
+}

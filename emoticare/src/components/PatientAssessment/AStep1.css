@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.step1-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* 👈 center the content vertically */
+  position: relative;
+}
+
+.step1-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step1-back-button img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.step1-back-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.step1-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+  max-height: 90vh;           /* 👈 limit height */
+  overflow-y: auto;           /* 👈 scroll if content overflows */
+}
+
+.step1-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.step1-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step1-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step1-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.step1-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.step1-option {
+  padding: 14px 20px;
+  border-radius: 999px;
+  border: 2px solid #ddd;
+  background-color: #fff;
+  font-size: 15px;
+  color: #4f3422;
+  font-weight: 600;
+  text-align: left;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.step1-option:hover {
+  border-color: #975dbd;
+}
+
+.step1-option.selected {
+  background-color: #f2e7fa;
+  border-color: #975dbd;
+  color: #975dbd;
+  font-weight: 600;
+}
+
+.step1-next-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step1-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.step1-next-button:hover:not(:disabled) {
+  background-color: #8446b5;
+}

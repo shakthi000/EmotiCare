@@ -1,0 +1,122 @@
+.step6-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step6-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step6-back-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.step6-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+  text-align: center;
+}
+
+.step6-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.step6-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step6-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step6-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+}
+
+.step6-options {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.step6-btn {
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: 2px solid #ccc;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: white;
+  color: #4f3422;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.step6-btn:hover {
+  border-color: #975dbd;
+}
+
+.step6-btn.selected {
+  background-color: #975dbd;
+  color: white;
+  border-color: #975dbd;
+}
+
+.step6-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step6-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.step6-next-button:hover:not(:disabled) {
+  background-color: #8446b5;
+}
+
+.step6-illustration {
+  width: 220px;
+  height: auto;
+  margin: 20px auto 24px;
+  display: block;
+}

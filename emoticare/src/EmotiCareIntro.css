@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.intro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #975DBD;
+  background-size: cover;          /* ✅ scales the image to fill */
+  background-position: center;     /* ✅ centers it */
+  background-repeat: no-repeat;  
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 20px;
+  position: relative;
+  color: #fff;
+  overflow: hidden;
+}
+
+.step-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeSlide 0.6s ease;
+  margin-top: 60px;
+}
+
+.step-bg {
+  width: 100%;
+  max-width: 400px;
+  height: 280px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 20px;
+  border-radius: 20px;
+}
+
+.step-number {
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #fff;
+  color: #975DBD;
+  padding: 8px 16px;
+  border-radius: 1000px;
+  margin-bottom: 16px;
+}
+
+.step-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  padding: 0 20px;
+  line-height: 1.4;
+  max-width: 300px;
+}
+
+.step-indicators {
+  display: flex;
+  gap: 10px;
+  margin: 40px 0 20px;
+}
+
+.indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d6a8f0;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.indicator.active {
+  background-color: #fff;
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+.button-row {
+  margin-bottom: 30px;
+}
+
+.circle-button {
+  background-color: #fff;
+  color: #975DBD;
+  border: none;
+  border-radius: 50%;
+  padding: 16px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(151, 93, 189, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.circle-button:hover {
+  transform: scale(1.08);
+}
+
+/* Step transition animation */
+.step-transition {
+  animation: fadeSlide 0.4s ease-in-out;
+}
+
+@keyframes fadeSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .step-title {
+    font-size: 20px;
+  }
+
+  .step-number {
+    font-size: 14px;
+  }
+
+  .step-bg {
+    height: 220px;
+    width: 100%;
+  }
+
+  .circle-button {
+    padding: 14px 18px;
+    font-size: 20px;
+  }
+}

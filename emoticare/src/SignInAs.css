@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.signin-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 40px;
+  animation: fadeIn 0.6s ease;
+}
+
+.header-2 {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.app-name-2 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #975dbd;
+  letter-spacing: 2px;
+}
+
+.tagline-2 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #975dbd;
+  letter-spacing: 1px;
+}
+
+.signin-content {
+  text-align: center;
+  color: #975dbd;
+}
+
+.signin-title {
+  font-size: 30px;
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+
+.user-type-options {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.user-type-button {
+  width: 400px;
+  height: 120px;
+  padding: 24px 32px;
+  font-size: 22px;
+  font-weight: 600;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* move content to the left */
+  gap: 20px;
+  background-color: #fff;
+  color: #975dbd;
+  text-align: left;
+}
+
+.user-type-button img.user-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.user-type-button span.user-label {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.user-type-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 500px) {
+  .app-name-2 {
+    font-size: 28px;
+  }
+
+  .signin-title {
+    font-size: 20px;
+  }
+
+  .user-type-button {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    font-size: 18px;
+    padding: 16px 20px;
+  }
+
+  .user-type-button img.user-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .user-type-button span.user-label {
+    font-size: 18px;
+  }
+}

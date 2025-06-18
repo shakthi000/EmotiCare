@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.signin-container {
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  color: #975dbd;
+}
+
+.signin-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.app-name {
+  font-size: 28px;
+  color: #975dbd;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.signin-content {
+  max-width: 400px;
+  width: 100%;
+  text-align: left;
+}
+
+.signin-title {
+  font-size: 30px;
+  color: #975dbd;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #975dbd;
+  font-size: 16px;
+}
+
+.form-input {
+  padding: 12px 14px;
+  border: 2px solid #ddd;
+  border-radius: 80px;
+  background-color: #fff;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #975dbd;
+}
+
+.form-input.error {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+}
+
+.error-message {
+  color: #975dbd;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.signin-button {
+  margin-top: 10px;
+  padding: 14px;
+  background-color: #975dbd;
+  color: #fff;
+  font-weight: 600;
+  font-size: 20px;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  height: 60px;
+}
+
+.signin-button:hover {
+  background-color: #8446b5;
+}
+
+.signin-links {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.link {
+  color: #975dbd;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .signin-content {
+    padding: 24px;
+  }
+
+  .app-name {
+    font-size: 22px;
+  }
+
+  .signin-title {
+    font-size: 20px;
+  }
+
+  .form-input {
+    font-size: 15px;
+  }
+
+  .signin-button {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+.signup-redirect {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #111;
+}
+
+.signup-redirect a {
+    color: #975dbd;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.input-icon-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.toggle-icon:hover {
+  opacity: 1;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 40px 12px 44px;
+  border: 2px solid #ddd;
+  border-radius: 80px;
+  font-size: 16px;
+  outline: none;
+  transition: 0.2s ease;
+  background-color: #fff;
+}
+
+.form-input::placeholder{
+  color: #975dbd;
+  opacity: 1;
+}
+
+eye-icon {
+  position: absolute;
+  right: 12px;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.social-login-section {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.social-login-text {
+  font-size: 14px;
+  color: #4f3422;
+  margin-bottom: 10px;
+}
+
+.social-login-icons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.social-button {
+  background-color: #f8f1e7;
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(151, 93, 189, 0.15);
+}
+
+.social-button img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.social-button:hover {
+  transform: scale(1.1);
+  background-color: #e4d2f3;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.back-button img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(151, 93, 189, 0.1);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 30px 24px;
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: #975dbd;
+  cursor: pointer;
+}
+
+/* Add animation for modal fade-in and scale */
+@keyframes fadeScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 30px 24px;
+  width: 90%;
+  max-width: 420px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+
+  animation: fadeScaleIn 0.3s ease forwards;
+}
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(3px);
+}

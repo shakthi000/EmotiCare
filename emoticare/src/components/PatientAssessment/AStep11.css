@@ -1,0 +1,165 @@
+.step10-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.step10-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.step10-back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.step10-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.15);
+}
+
+.step10-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.step10-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step10-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step10-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.step10-image {
+  width: 180px;
+  margin: 0 auto 20px auto;
+  display: block;
+}
+
+.step10-input-box {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.step10-input-box input {
+  width: 560px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  border: 2px solid #975dbd;
+  font-size: 15px;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  color: #4f3422;
+  margin-bottom: 15px;
+  transition: border 0.3s ease;
+}
+
+.step10-tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.step10-tag {
+  background-color: #f3e8fd;
+  color: #975dbd;
+  border: 1.5px solid #975dbd;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.remove-tag {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.step10-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #4f3422;
+  margin-bottom: 20px;
+}
+
+.step10-most-common {
+  font-weight: 500;
+}
+
+.pill {
+  background-color: #975dbd;
+  color: white;
+  font-size: 12px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-left: 8px;
+}
+
+.pill-light {
+  background-color: #f2e7fa;
+  color: #975dbd;
+}
+
+.step10-counter {
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step10-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step10-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.step10-next-button:hover:not(:disabled) {
+  background-color: #8446b5;
+}
