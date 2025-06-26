@@ -1,0 +1,96 @@
+.resources-container {
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  padding-bottom: 100px; /* for footer space */
+}
+
+.resources-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.resources-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.verified-badge {
+  background-color: #975dbd;
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.resources-subheading {
+  font-size: 20px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+}
+
+.resources-category {
+  font-size: 18px;
+  font-weight: 700;
+  color: #975dbd;
+  margin: 16px 0 8px;
+}
+
+.resources-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 12px;
+}
+
+.resource-card {
+  min-width: 200px;
+  background-color: #fff;
+  border: 2px solid #975dbd;
+  border-radius: 16px;
+  padding: 16px;
+  color: #975dbd;
+  font-weight: 600;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.resource-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.resource-icon {
+  position: absolute;
+  bottom: 12px;
+  right: 16px;
+  font-size: 18px;
+}
+
+.faded {
+  opacity: 0.5;
+  border-style: dashed;
+}
+
+.resources-back-button {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.resources-back-icon {
+  width: 24px;
+  height: 24px;
+}

@@ -1,0 +1,102 @@
+.step13-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  position: relative;
+}
+
+.step13-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step13-back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.step13-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.1);
+  text-align: center;
+}
+
+.step13-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.step13-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step13-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step13-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 8px;
+}
+
+.step13-instruction {
+  font-size: 14px;
+  color: #4f3422;
+  margin-bottom: 20px;
+}
+
+.step13-illustration {
+  width: 180px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.step13-highlight {
+  font-size: 16px;
+  font-weight: 600;
+  color: #975dbd;
+  background-color: #f2e7fa;
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.step13-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.step13-next-button:hover {
+  background-color: #7f3c9b;
+}

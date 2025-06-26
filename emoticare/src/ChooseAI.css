@@ -1,0 +1,91 @@
+.chooseai-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  padding: 24px;
+  position: relative;
+}
+
+.chooseai-back-button {
+  background: none;
+  border: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.chooseai-back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.chooseai-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  margin-bottom: 16px;
+}
+
+.chooseai-title {
+  color: #975dbd;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.network-status {
+  background-color: #975dbd;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.chooseai-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.chooseai-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+    align-items: center;
+}
+
+.chooseai-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #975dbd;
+  border-radius: 20px;
+  padding: 16px 20px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chooseai-card:hover {
+  transform: scale(1.02);
+}
+
+.chooseai-label {
+  color: #975dbd;
+  font-weight: 600;
+  font-size: 15px;
+  text-align: left;
+}
+
+.chooseai-img {
+  width: 60px;
+  height: auto;
+}

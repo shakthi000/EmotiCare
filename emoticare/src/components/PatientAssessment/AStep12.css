@@ -1,0 +1,183 @@
+.step12-container {
+  min-height: 100vh;
+  background-color: #f8f1e7;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  position: relative;
+}
+
+.step12-back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.step12-back-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.step12-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(151, 93, 189, 0.1);
+}
+
+.step12-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.step12-heading {
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.step12-count {
+  font-size: 13px;
+  font-weight: 600;
+  background-color: #975dbd;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 20px;
+}
+
+.step12-question {
+  font-size: 22px;
+  font-weight: 700;
+  color: #975dbd;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.step12-scale {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.step12-dot {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  color: #975dbd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step12-dot.selected {
+  background: #975dbd;
+  color: white;
+  border-color: #975dbd;
+}
+
+.step12-feedback {
+  font-size: 14px;
+  color: #4f3422;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.step12-next-button {
+  background-color: #975dbd;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.step12-next-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Add this to your AStep12.css */
+.step12-slider {
+  margin: 24px 0 8px 0;
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+.slider-label {
+  font-size: 0.9em;
+  width: 60px;
+  text-align: center;
+}
+
+/* ...existing code... */
+.step12-selected-number {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #975dbd;
+  margin-bottom: 8px;
+}
+
+.step12-slider-numbers {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.step12-slider-dot {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  font-weight: 600;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  color: #975dbd;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.step12-slider-dot.selected {
+  background: #975dbd;
+  color: white;
+  border-color: #975dbd;
+}
+
+.step12-slider-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  min-height: 24px;
+}
+
+.step12-slider-label {
+  width: 44px;
+  text-align: center;
+  font-size: 0.95em;
+  color: #975dbd;
+  font-weight: 500;
+}
+
+.step12-slider-label.selected {
+  color: #4f3422;
+}

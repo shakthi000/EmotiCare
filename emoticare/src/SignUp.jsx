@@ -64,7 +64,6 @@ const SignUp = () => {
 
   return (
     <div className="signup-container">
-      <div className="time-display">9:41</div>
       
       <div className="signup-header">
         <h1 className="app-name">EMOTICARE</h1>

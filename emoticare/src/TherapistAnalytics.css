@@ -1,0 +1,76 @@
+.thera-analytics-container {
+  background: #f8f1e7;
+  min-height: 100vh;
+  padding: 24px;
+  font-family: 'Poppins';
+  position: relative;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.badge {
+  background-color: #975dbd;
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+  height: 18px;
+  border-radius: 12px;
+}
+
+.performance-text {
+  font-size: 20px;
+  margin: 20px 0;
+  font-weight: 600;
+  color: #975dbd;
+}
+
+.weekly-mood {
+  margin-bottom: 24px;
+}
+
+.mood-week {
+  display: flex;
+  gap: 10px;
+  justify-content: space-around;
+}
+
+.mood-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+}
+
+.monthly-section .graph {
+  width: 100%;
+  border-radius: 20px;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: white;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+}
+.bottom-nav button {
+  background: transparent;
+  border: none;
+  color: #975dbd;
+  font-size: 16px;
+  cursor: pointer;
+}
+.bottom-nav button.active {
+  font-weight: bold;
+  border-bottom: 2px solid #975dbd;
+}
+.bottom-nav button :hover {
+  color: #7a4c9e;
+}

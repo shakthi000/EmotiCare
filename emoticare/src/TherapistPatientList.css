@@ -1,0 +1,57 @@
+.thera-list-container {
+  background: #f8f1e7;
+  min-height: 100vh;
+  padding: 24px;
+  font-family: 'Poppins';
+  position: relative;
+}
+
+.back-btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: transparent;
+  border: none;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.net-status {
+  background: #975dbd;
+  color: white;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.select-text {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 24px 0;
+  color: #975dbd;
+}
+
+.patient-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.patient-card {
+  background: white;
+  border: 2px solid #975dbd;
+  border-radius: 20px;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #975dbd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}

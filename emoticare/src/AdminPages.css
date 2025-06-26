@@ -1,0 +1,168 @@
+.admin-container {
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fdf7f5;
+  min-height: 100vh;
+  color: #975dbd;
+}
+
+.admin-title {
+  font-size: 24px;
+  color: #975dbd;
+  margin-bottom: 10px;
+}
+
+.admin-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-card {
+  background: #f5f0fa;
+  border-radius: 12px;
+  padding: 16px;
+  flex: 1;
+  min-width: 100px;
+}
+
+.admin-card h3 {
+  font-size: 24px;
+  margin: 4px 0;
+}
+
+.positive {
+  color: #975dbd;
+  font-weight: bold;
+}
+
+.negative {
+  color: #975dbd;
+  font-weight: bold;
+}
+
+.admin-links {
+  margin-top: 24px;
+  display: flex;
+  gap: 20px;
+}
+
+.admin-links button {
+  padding: 10px 20px;
+  background-color: #975dbd;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.admin-user-list {
+  margin-top: 16px;
+}
+
+.admin-user-card {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  background: #f7f4fa;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.avatar-circle {
+  background-color: #975dbd;
+  color: white;
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.user-name {
+  font-weight: 600;
+  margin: 0;
+}
+
+.user-role {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.admin-search {
+  padding: 10px;
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+
+.admin-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 0;
+}
+
+.admin-nav button {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #555;
+  font-weight: 500;
+}
+
+.admin-nav .active {
+  color: #975dbd;
+  font-weight: bold;
+  border-bottom: 2px solid #975dbd;
+}
+
+.report-chart-placeholder {
+  margin-top: 10px;
+  padding: 20px;
+  background-color: #eee;
+  text-align: center;
+  border-radius: 10px;
+  color: #555;
+}
+.admin-chart {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f5f0fa;
+  border-radius: 10px;
+}
+.small-sub {
+  font-size: 13px;
+  color: #888;
+  margin-top: -8px;
+  margin-bottom: 10px;
+}
+
+.report-chart-placeholder {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f2eafd;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 16px;
+  color: #5a3472;
+}
+
+.mini-graph {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}

@@ -1,0 +1,48 @@
+.global-font-small {
+  font-size: 12px;
+}
+
+.global-font-medium {
+  font-size: 16px;
+}
+
+.global-font-large {
+  font-size: 20px;
+}
+
+/* Base style */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.theme-light {
+  background-color: #f8f1e7;
+  color: #4f3422;
+}
+
+.theme-dark {
+  background-color: #1f1a27;
+  color: #f2e7fa;
+}
+
+/* Optional: override cards, buttons, inputs etc */
+.theme-dark .card,
+.theme-dark .step-card,
+.theme-dark .settings-card {
+  background-color: #2e2340;
+  color: #fff;
+  border: 1px solid #975dbd;
+}
+
+.theme-dark input,
+.theme-dark textarea {
+  background-color: #382e4c;
+  color: #fff;
+  border: 1px solid #975dbd;
+}
+
+.theme-dark .step-button,
+.theme-dark .bottom-nav button {
+  background-color: #975dbd;
+  color: white;
+}

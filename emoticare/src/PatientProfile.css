@@ -1,0 +1,154 @@
+.patient-profile-container {
+  padding: 24px;
+  font-family: 'Poppins', sans-serif;
+  background-color: #fdf6fd;
+  color: #975dbd;
+  min-height: 100vh;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  background: none;
+  border: none;
+}
+
+.back-button img {
+  width: 24px;
+}
+
+.profile-title {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+  margin-top: 40px;
+  color: #975dbd;
+}
+
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.account-header.center {
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.profile-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.account-name {
+  font-weight: bold;
+  font-size: 18px;
+  color: #975dbd;
+}
+
+.account-email {
+  font-size: 14px;
+  color: #975dbd;
+}
+
+.edit-btn {
+  background-color: #975dbd;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.account-menu {
+  list-style: none;
+  padding: 0;
+  margin-top: 16px;
+}
+
+.account-menu li {
+  padding: 12px 0;
+  border-bottom: 1px solid #e6d5f9;
+  cursor: pointer;
+  font-size: 16px;
+  color: #975dbd;
+}
+
+.account-menu .logout {
+  color: red;
+  font-weight: bold;
+}
+
+.edit-heading {
+  font-size: 18px;
+  margin: 20px 0 10px;
+  text-align: center;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-form input,
+.edit-form select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #d4b0f4;
+  font-size: 14px;
+  color: #4f2a6d;
+  width: 50%;
+}
+
+.save-btn {
+  background-color: #975dbd;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 20px;
+  font-size: 16px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+  justify-content: center;
+}
+
+.form-row label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #975dbd;
+  width: 30%;
+}
+
+.form-row input,
+.form-row select {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  background: #fff;
+  color: #333;
+}
