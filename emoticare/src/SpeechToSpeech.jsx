@@ -1,30 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ChatCommon.css';
-import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const SpeechToSpeech = () => {
-  const navigate = useNavigate();
   const [messages, setMessages] = useState([{ sender: 'AI', text: "Hi Jerry, how's your day?" }]);
   const [recording, setRecording] = useState(false);
+  const recognitionRef = useRef(null);
+
+  useEffect(() => {
+    // Initialize SpeechRecognition only once
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognitionRef.current = new SpeechRecognition();
+    recognitionRef.current.lang = 'en-US';
+    recognitionRef.current.interimResults = false;
+
+    // Clean up on unmount
+    return () => {
+      recognitionRef.current.abort();
+    };
+  }, []);
+
+  const fetchReply = async (message) => {
+    const res = await axios.post('http://localhost:5000/api/chat/therapist', { message });
+    return res.data.reply;
+  };
 
   const toggleRecording = () => {
-    setRecording(prev => !prev);
     if (!recording) {
-      // Simulate response after 2s
-      setTimeout(() => {
-        const userSpeech = "Hi AI, my day is going great!";
-        const aiReply = "That's lovely to hear!";
-        setMessages(prev => [...prev, { sender: 'User', text: userSpeech }, { sender: 'AI', text: aiReply }]);
-      }, 2000);
+      setRecording(true);
+      recognitionRef.current.start();
+
+      recognitionRef.current.onresult = async (event) => {
+        const userText = event.results[0][0].transcript;
+
+        setMessages(prev => [...prev, { sender: 'User', text: userText }]);
+
+        const reply = await fetchReply(userText);
+        setMessages(prev => [...prev, { sender: 'AI', text: reply }]);
+
+        const utter = new SpeechSynthesisUtterance(reply);
+        window.speechSynthesis.speak(utter);
+        setRecording(false);
+      };
+
+      recognitionRef.current.onerror = (err) => {
+        console.error('Speech recognition error:', err);
+        setRecording(false);
+      };
+
+    } else {
+      recognitionRef.current.stop();
+      setRecording(false);
     }
   };
 
   return (
     <div className="ai5-container">
-        <div className="chat-header">
-            <span className="chat-title">Speech to Speech</span>
-            <span className="chat-status">Ready</span>
-        </div>
+      <div className="chat-header">
+        <span className="chat-title">Speech to Speech</span>
+        <span className="chat-status">{recording ? 'Listening...' : 'Ready'}</span>
+      </div>
+
       <div className="chat-bubbles">
         {messages.map((msg, idx) => (
           <div key={idx} className={`bubble ${msg.sender.toLowerCase()}`}>

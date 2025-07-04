@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext.jsx';
 import './AStep1.css';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const options = [
   "I wanna reduce stress",
@@ -18,9 +19,19 @@ const AStep1 = () => {
 
   const answer = answers[0];
 
-  const handleSelect = (value) => {
-    saveAnswer(0, value);
-  };
+  const handleSelect = async (value) => {
+  saveAnswer(0, value);
+  const user_id = localStorage.getItem('user_id');
+  try {
+    await axios.post('http://localhost:5000/api/step1', {
+      user_id,
+      goal: value,
+    });
+  } catch (err) {
+    alert("❌ Failed to save Step 1");
+  }
+};
+
 
   return (
     <div className="step1-container">

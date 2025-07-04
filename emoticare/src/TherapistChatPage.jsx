@@ -1,51 +1,37 @@
-import React, { useState } from 'react';
-import './TherapistChatPage.css';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { io } from "socket.io-client";
+import "./TherapistChatPage.css";
+
+const socket = io("http://localhost:5000"); // Socket connection
 
 const TherapistChatPage = () => {
-  const { patientName } = useParams();
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([
-    { from: 'patient', text: `Hi, I'm ${patientName}.` }
-  ]);
+  const { patientName } = useParams(); // Get from URL
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+  const room = `room-${patientName.toLowerCase()}`;
 
-  // Patient-like AI response simulation
-  const getPatientResponse = (therapistInput) => {
-    const text = therapistInput.toLowerCase();
-    if (text.includes('how are you') || text.includes('feeling')) {
-      return "I'm feeling a bit anxious today.";
-    }
-    if (text.includes('stress')) {
-      return "Yes, I've been feeling stressed because of work lately.";
-    }
-    if (text.includes('happy') || text.includes('good')) {
-      return "I'm glad to hear that. I try to focus on the positives.";
-    }
-    if (text.includes('coping') || text.includes('strategies')) {
-      return "I usually go for a walk or listen to music to cope.";
-    }
-    if (text.includes('alone') || text.includes('lonely')) {
-      return "Sometimes I do feel lonely, especially on weekends.";
-    }
-    if (text.includes('help')) {
-      return "I think talking about my feelings like this is already helping.";
-    }
-    if (text.includes('thank')) {
-      return "Thank you for listening and supporting me.";
-    }
-    return "It's sometimes hard to put my feelings into words, but I'm trying.";
-  };
+  useEffect(() => {
+    setMessages([{ from: "system", text: `You joined the room: ${room}` }]);
+    socket.emit("join", { room, username: "THERAPIST" });
+
+    socket.on("message", (msg) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    return () => {
+      socket.off("message");
+    };
+  }, [room]);
 
   const sendMessage = () => {
-    if (input.trim()) {
-      const therapistMsg = { from: 'therapist', text: input };
-      setMessages((prev) => [...prev, therapistMsg]);
-      const patientReply = getPatientResponse(input);
-      setTimeout(() => {
-        setMessages((prev) => [...prev, { from: 'patient', text: patientReply }]);
-      }, 800);
-      setInput('');
-    }
+    if (!input.trim()) return;
+    socket.emit("send_message", {
+      room,
+      sender: "THERAPIST",
+      text: input,
+    });
+    setInput("");
   };
 
   return (
@@ -57,7 +43,7 @@ const TherapistChatPage = () => {
 
       <div className="chat-messages">
         {messages.map((msg, i) => (
-          <div key={i} className={`msg ${msg.from}`}>
+          <div key={i} className={`msg ${msg.from.toLowerCase()}`}>
             {msg.text}
           </div>
         ))}
@@ -69,7 +55,7 @@ const TherapistChatPage = () => {
           placeholder="Send a message as therapist ..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button onClick={sendMessage}>➤</button>
       </div>

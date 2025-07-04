@@ -2,9 +2,17 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import backArrow from './assets/back-arrow.png'; // Update path as needed
 import './AdminReports.css';
+import { useState, useEffect } from 'react';
 
 const AdminReports = () => {
   const navigate = useNavigate();
+
+  const [report, setReport] = useState({});
+useEffect(() => {
+  fetch("http://localhost:5000/api/admin/reports")
+    .then(res => res.json())
+    .then(data => setReport(data));
+}, []);
 
   return (
     <div className="admin-reports-container">
@@ -21,11 +29,11 @@ const AdminReports = () => {
         <div className="overview-cards">
           <div className="overview-item">
             <p className="overview-label">Total Therapists</p>
-            <p className="overview-value">125</p>
+            <p className="overview-value">{report.therapists}</p>
           </div>
           <div className="overview-item">
             <p className="overview-label">Total Patients</p>
-            <p className="overview-value">280</p>
+            <p className="overview-value">{report.patients}</p>
           </div>
         </div>
       </section>
@@ -33,8 +41,8 @@ const AdminReports = () => {
       <section className="section">
         <h3 className="section-heading">Performance Reports</h3>
         <p className="subheading">Customer Satisfaction</p>
-        <p className="satisfaction-value">85%</p>
-        <p className="subtext">Last 3 Months +5%</p>
+        <p className="satisfaction-value">{report.satisfaction}</p>
+        <p className="subtext">Last 3 Months {report.growth}</p>
 
         <div className="line-chart">
           <svg viewBox="0 0 100 40" preserveAspectRatio="none">

@@ -4,16 +4,26 @@ import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext.jsx';
 import backArrow from '../../assets/back-arrow.png';
 import profHelp from '../../assets/profhelp.png'; // <-- Add your image here
-
+import axios from 'axios';
 
 const AStep6 = () => {
   const navigate = useNavigate();
   const { answers, saveAnswer } = useAssessment();
   const answer = answers[5]; // index 5 for Q6
 
-  const handleSelect = (value) => {
-    saveAnswer(5, value);
-  };
+  const handleSelect = async (value) => {
+  saveAnswer(5, value);
+  try {
+    const user_id = localStorage.getItem("user_id");
+    await axios.post("http://localhost:5000/api/step6", {
+      user_id,
+      sought_help: value
+    });
+  } catch (err) {
+    alert("❌ Error saving Step 6");
+  }
+};
+
 
   return (
     <div className="step6-container">

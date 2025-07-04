@@ -2,9 +2,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AdminPages.css';
 import backArrow from './assets/back-arrow.png'; // Ensure the path is correct
+import { useState, useEffect } from 'react';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({ total: 0, active: 0, new: 0 });
+  useEffect(() => {
+  fetch("http://localhost:5000/api/admin/dashboard")
+    .then(res => res.json())
+    .then(data => {
+      setStats(data); // total, active, new
+    });
+}, []);
+
 
   return (
     <div className="admin-container">
@@ -18,19 +28,19 @@ const AdminDashboard = () => {
       <div className="admin-stats">
         <div className="admin-card">
           <p>Total Patients</p>
-          <h3>125</h3>
+          <h3>{stats.total}</h3>
           <span className="positive">+10%</span>
         </div>
         <br />
         <div className="admin-card">
           <p>Active Patients</p>
-          <h3>85</h3>
+          <h3>{stats.active}</h3>
           <span className="negative">-5%</span>
         </div>
         <br />
         <div className="admin-card">
           <p>New Patients</p>
-          <h3>30</h3>
+          <h3>{stats.new}</h3>
           <span className="positive">+15%</span>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import './PatientProfile.css';
 import { useNavigate } from 'react-router-dom';
 import { usePatientProfile } from './context/PatientProfileContext';
@@ -7,7 +7,11 @@ import profileIcon from './assets/profile-icon.png';
 
 const PatientAccountPage = () => {
   const navigate = useNavigate();
-  const { profile } = usePatientProfile();
+  const { profile, fetchProfile } = usePatientProfile();
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <div className="patient-profile-container">

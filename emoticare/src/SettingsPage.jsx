@@ -55,8 +55,6 @@ const SettingsPage = () => {
     </button>
   </div>
 </div>
-
-
       <div className="settings-section">
         <p className="label" style={{color:"#975dbd"}}>Language</p>
         <div className="language-options">

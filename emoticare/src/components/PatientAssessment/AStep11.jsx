@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
 import sadGirl from '../../assets/sadGirl.png';
+import axios from 'axios';
 
 const AStep11 = () => {
   const navigate = useNavigate();
@@ -11,14 +12,24 @@ const AStep11 = () => {
   const [inputValue, setInputValue] = useState('');
   const tags = answers[9] || [];
 
-  const addTag = () => {
-    const trimmed = inputValue.trim();
-    if (trimmed && tags.length < 10 && !tags.includes(trimmed)) {
-      const updated = [...tags, trimmed];
-      saveAnswer(9, updated);
-      setInputValue('');
+  const addTag = async () => {
+  const trimmed = inputValue.trim();
+  if (trimmed && tags.length < 10 && !tags.includes(trimmed)) {
+    const updated = [...tags, trimmed];
+    saveAnswer(10, updated);
+    setInputValue('');
+
+    const user_id = localStorage.getItem("user_id");
+    try {
+      await axios.post("http://localhost:5000/api/step11", {
+        user_id,
+        symptoms: updated
+      });
+    } catch (err) {
+      alert("❌ Failed to save Step 11");
     }
-  };
+  }
+};
 
   const removeTag = (tagToRemove) => {
     const updated = tags.filter((tag) => tag !== tagToRemove);

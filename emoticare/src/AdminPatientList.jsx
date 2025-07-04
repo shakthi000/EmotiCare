@@ -3,18 +3,32 @@ import './AdminPages.css';
 import backArrow from './assets/back-arrow.png';
 import plusIcon from './assets/plus-icon.png';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const initialPatients = ['Sanjay', 'Vignesh', 'Yuvasri', 'Shakthi'];
+const initialPatients = [];
 
 const AdminPatientList = () => {
   const [search, setSearch] = useState('');
   const [patients, setPatients] = useState(initialPatients);
   const navigate = useNavigate();
 
-  const handleAdd = () => {
-    const name = prompt('Enter new patient name:');
-    if (name) setPatients(prev => [...prev, name]);
-  };
+  useEffect(() => {
+  fetch("http://localhost:5000/api/admin/patients")
+    .then(res => res.json())
+    .then(data => setPatients(data));
+}, []);
+
+  const handleAdd = async () => {
+  const name = prompt('Enter new patient name:');
+  if (name) {
+    await fetch("http://localhost:5000/api/admin/patients", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name })
+    });
+    setPatients(prev => [...prev, name]);
+  }
+};
 
   const filtered = patients.filter(p =>
     p.toLowerCase().includes(search.toLowerCase())

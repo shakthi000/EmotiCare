@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import './ChatCommon.css';
+import axios from 'axios';
 
 const TextToText = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    const newMsg = { sender: 'user', text: input };
-    setMessages(prev => [...prev, newMsg]);
+  const sendMessage = async () => {
+  if (!input.trim()) return;
 
-    // Simulate AI response
-    setTimeout(() => {
-      const reply = { sender: 'ai', text: "Hello!" };
-      setMessages(prev => [...prev, reply]);
-    }, 1000);
+  const newMsg = { sender: 'user', text: input };
+  setMessages((prev) => [...prev, newMsg]);
 
-    setInput('');
-  };
+  const res = await axios.post('http://localhost:5000/api/chat/therapist', { message: input });
+  const reply = { sender: 'ai', text: res.data.reply };
+
+  setMessages((prev) => [...prev, reply]);
+  setInput('');
+};
 
   return (
     <div className="chat-container">

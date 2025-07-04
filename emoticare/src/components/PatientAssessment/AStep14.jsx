@@ -4,6 +4,7 @@ import './AStep14.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const AStep14 = () => {
   const navigate = useNavigate();
@@ -40,10 +41,20 @@ const AStep14 = () => {
     }
   };
 
-  const handleSaveAndNext = () => {
-    saveAnswer(13, input); // Step 14 = index 13
+  const handleSaveAndNext = async () => {
+  saveAnswer(13, input);
+  const user_id = localStorage.getItem("user_id");
+
+  try {
+    await axios.post("http://localhost:5000/api/step14", {
+      user_id,
+      expression: input,
+    });
     navigate('/dashboard/patient');
-  };
+  } catch (err) {
+    alert("❌ Failed to save Step 14");
+  }
+};
 
   return (
     <div className="step14-container">

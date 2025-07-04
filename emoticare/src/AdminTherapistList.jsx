@@ -1,29 +1,36 @@
 import React, { useState } from 'react';
-import './adminpages.css';
+import './AdminPages.css';
 import backArrow from './assets/back-arrow.png';
 import plusIcon from './assets/plus-icon.png';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const initialTherapists = [
-  { name: 'Ethan Carter', role: 'Admin' },
-  { name: 'Sophie Bennett', role: 'Manager' },
-  { name: 'Liam Harper', role: 'Consultant' },
-  { name: 'Olivia Hayes', role: 'Property Owner' },
-  { name: 'Noah Foster', role: 'Inactive' }
-];
+const initialTherapists = [];
 
 const AdminTherapistList = () => {
   const [search, setSearch] = useState('');
   const [therapists, setTherapists] = useState(initialTherapists);
   const navigate = useNavigate();
 
-  const handleAdd = () => {
-    const name = prompt('Enter therapist name:');
-    const role = prompt('Enter therapist role:');
-    if (name && role) {
-      setTherapists(prev => [...prev, { name, role }]);
-    }
-  };
+  useEffect(() => {
+  fetch("http://localhost:5000/api/admin/therapists")
+    .then(res => res.json())
+    .then(data => setTherapists(data));
+}, []);
+
+
+  const handleAdd = async () => {
+  const name = prompt('Enter therapist name:');
+  const role = prompt('Enter therapist role:');
+  if (name && role) {
+    await fetch("http://localhost:5000/api/admin/therapists", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, role })
+    });
+    setTherapists(prev => [...prev, { name, role }]);
+  }
+};
 
   const filtered = therapists.filter(t =>
     t.name.toLowerCase().includes(search.toLowerCase())

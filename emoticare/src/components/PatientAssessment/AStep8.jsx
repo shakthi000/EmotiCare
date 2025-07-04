@@ -3,6 +3,7 @@ import './AStep8.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const sleepOptions = [
   { label: 'Excellent', hours: '7–9 HOURS', emoji: '😊' },
@@ -17,9 +18,20 @@ const AStep8 = () => {
   const { answers, saveAnswer } = useAssessment();
   const selectedIndex = sleepOptions.findIndex(opt => opt.label === answers[7]);
 
-  const handleSelect = (index) => {
-    saveAnswer(7, sleepOptions[index].label);
-  };
+  const handleSelect = async (index) => {
+  const label = sleepOptions[index].label;
+  saveAnswer(7, label);
+  const user_id = localStorage.getItem("user_id");
+
+  try {
+    await axios.post("http://localhost:5000/api/step8", {
+      user_id,
+      sleep_quality: label
+    });
+  } catch (err) {
+    alert("❌ Failed to save Step 8");
+  }
+};
 
   return (
     <div className="step8-container">

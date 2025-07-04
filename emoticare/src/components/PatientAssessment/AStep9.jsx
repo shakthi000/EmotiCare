@@ -3,6 +3,7 @@ import './AStep9.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 // image imports
 import med1 from '../../assets/step9-1.png';
@@ -34,9 +35,19 @@ const AStep9 = () => {
   const { answers, saveAnswer } = useAssessment();
   const answer = answers[8];
 
-  const handleSelect = (value) => {
-    saveAnswer(8, value);
-  };
+  const handleSelect = async (value) => {
+  saveAnswer(8, value);
+  const user_id = localStorage.getItem("user_id");
+
+  try {
+    await axios.post("http://localhost:5000/api/step9", {
+      user_id,
+      medication_status: value
+    });
+  } catch (err) {
+    alert("❌ Failed to save Step 9");
+  }
+};
 
   return (
     <div className="step9-container">

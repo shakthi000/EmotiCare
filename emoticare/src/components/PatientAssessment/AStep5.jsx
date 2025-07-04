@@ -3,6 +3,7 @@ import './AStep5.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext.jsx';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const moods = [
   { emoji: '😫', label: 'Very Sad' },
@@ -17,9 +18,19 @@ const AStep5 = () => {
   const { answers, saveAnswer } = useAssessment();
   const selectedMood = answers[4];
 
-  const handleSelect = (mood) => {
-    saveAnswer(4, mood.label);
-  };
+  const handleSelect = async (mood) => {
+  saveAnswer(4, mood.label);
+  try {
+    const user_id = localStorage.getItem("user_id");
+    await axios.post("http://localhost:5000/api/step5", {
+      user_id,
+      mood: mood.label
+    });
+  } catch (err) {
+    alert("❌ Error saving Step 5");
+  }
+};
+
 
   return (
     <div className="step5-container">

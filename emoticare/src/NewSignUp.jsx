@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './SignInForm.css';
 
 import logoImg from './assets/logo.png';
@@ -40,43 +41,32 @@ const NewSignUp = ({ role }) => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
   e.preventDefault();
-  let valid = true;
   const newErrors = {
-    email: false,
-    password: false,
-    confirmPassword: false
+    email: !validateEmail(formData.email),
+    password: formData.password.length < 6,
+    confirmPassword: formData.password !== formData.confirmPassword,
   };
 
-  if (!validateEmail(formData.email)) {
-    newErrors.email = true;
-    valid = false;
-  }
-
-  if (formData.password.length < 6) {
-    newErrors.password = true;
-    valid = false;
-  }
-
-  if (formData.confirmPassword !== formData.password) {
-    newErrors.confirmPassword = true;
-    valid = false;
-  }
-
   setErrors(newErrors);
+  const valid = !Object.values(newErrors).includes(true);
 
   if (valid) {
-     // Save to localStorage
-    localStorage.setItem('demo_email', formData.email);
-    localStorage.setItem('demo_password', formData.password);
-
-     // Navigate to sign in
-    alert('✅ Account created successfully!');
-    navigate('/signinas');
-
+    try {
+      await axios.post('http://localhost:5000/api/signup', {
+        email: formData.email,
+        password: formData.password,
+        role: role || 'patients', // default to patient
+      });
+      alert('✅ Sign Up Successful!');
+      navigate('/signinas');
+    } catch (err) {
+      alert(err.response?.data?.error || "Something went wrong!");
+    }
   }
 };
+
 
 
 

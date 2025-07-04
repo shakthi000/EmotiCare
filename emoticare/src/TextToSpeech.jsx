@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ChatCommon.css';
+import axios from 'axios';
 
 const TextToSpeech = () => {
   const [input, setInput] = useState('');
@@ -10,17 +11,19 @@ const TextToSpeech = () => {
     window.speechSynthesis.speak(utterance);
   };
 
-  const sendMessage = () => {
-    if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
-      setInput('');
-      setTimeout(() => {
-        const response = "You said: " + input;
-        setMessages(prev => [...prev, { sender: 'ai', text: response }]);
-        speak(response);
-      }, 400);
-    }
-  };
+  const sendMessage = async () => {
+  if (input.trim()) {
+    const userMessage = input;
+    setMessages([...messages, { sender: 'user', text: userMessage }]);
+    setInput('');
+
+    const res = await axios.post('http://localhost:5000/api/chat/therapist', { message: userMessage });
+    const aiResponse = res.data.reply;
+
+    setMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
+    speak(aiResponse);
+  }
+};
 
   return (
     <div className="chat-container">

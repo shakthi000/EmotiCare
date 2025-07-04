@@ -3,6 +3,7 @@ import './AStep3.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext.jsx';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const AStep3 = () => {
   const navigate = useNavigate();
@@ -11,10 +12,20 @@ const AStep3 = () => {
   const [selectedAge, setSelectedAge] = useState(answers[2] || 18);
   const ageRange = Array.from({ length: 85 }, (_, i) => i + 16); // 16–100
 
-  const handleNext = () => {
-    saveAnswer(2, selectedAge);
+const handleNext = async () => {
+  saveAnswer(2, selectedAge);
+  const user_id = localStorage.getItem('user_id');
+  try {
+    await axios.post('http://localhost:5000/api/step3', {
+      user_id,
+      age: selectedAge,
+    });
     navigate('/assessment/step4');
-  };
+  } catch (err) {
+    alert("❌ Failed to save Step 3");
+  }
+};
+
 
   return (
     <div className="step3-container">

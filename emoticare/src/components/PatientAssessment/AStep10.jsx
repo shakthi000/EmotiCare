@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
 import heartHands from '../../assets/heart-hands.png';
+import axios from 'axios';
 
 const AStep10 = () => {
   const navigate = useNavigate();
@@ -11,18 +12,30 @@ const AStep10 = () => {
   const [inputValue, setInputValue] = useState('');
   const tags = answers[9] || [];
 
-  useEffect(() => {
-    resetAnswer(9); // ✅ Reset Step 10 on mount
-  }, []);
+ useEffect(() => {
+  if (answers[9]?.length > 0) {
+    resetAnswer(9); // Reset once only if stale tags exist
+  }
+}, []);
 
-  const addTag = () => {
-    const trimmed = inputValue.trim();
-    if (trimmed && tags.length < 10 && !tags.includes(trimmed)) {
-      const updated = [...tags, trimmed];
-      saveAnswer(9, updated);
-      setInputValue('');
+  const addTag = async () => {
+  const trimmed = inputValue.trim();
+  if (trimmed && tags.length < 10 && !tags.includes(trimmed)) {
+    const updated = [...tags, trimmed];
+    saveAnswer(9, updated);
+    setInputValue('');
+
+    const user_id = localStorage.getItem("user_id");
+    try {
+      await axios.post("http://localhost:5000/api/step10", {
+        user_id,
+        tags: updated
+      });
+    } catch (err) {
+      alert("❌ Failed to save Step 10");
     }
-  };
+  }
+};
 
   const removeTag = (tagToRemove) => {
     const updated = tags.filter((tag) => tag !== tagToRemove);

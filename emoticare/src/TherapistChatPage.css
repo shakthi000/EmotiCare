@@ -1,71 +1,52 @@
 .thera-chat-container {
-  background: #f8f1e7;
-  min-height: 100vh;
-  padding: 24px;
-  font-family: 'Poppins';
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
 .chat-header {
+  background: #6a1b9a;
+  color: white;
+  padding: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.call-button {
-  background: #975dbd;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 16px;
-}
-
 .chat-messages {
-  margin: 24px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
 }
 
 .msg {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
   max-width: 70%;
-  padding: 10px 14px;
-  border-radius: 20px;
 }
 
-.msg.ai {
-  background: #eee;
-  align-self: flex-start;
-}
-
-.msg.user {
-  background: #975dbd;
-  color: white;
+.msg.therapist {
+  background-color: #d1c4e9;
   align-self: flex-end;
+}
+
+.msg.patient {
+  background-color: #ede7f6;
+  align-self: flex-start;
 }
 
 .chat-input-box {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  background: white;
-  border-radius: 30px;
-  padding: 10px 16px;
+  padding: 10px;
 }
 
 .chat-input-box input {
   flex: 1;
-  border: none;
-  font-size: 16px;
-  outline: none;
-  background: transparent;
+  padding: 0.5rem;
 }
 
 .chat-input-box button {
-  background: transparent;
-  border: none;
-  font-size: 18px;
-  color: #975dbd;
-}
-.chat-input-box button:hover {
-  color: #7a4a9c;
+  margin-left: 10px;
+  padding: 0.5rem 1rem;
 }

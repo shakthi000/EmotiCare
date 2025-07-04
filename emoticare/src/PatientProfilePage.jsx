@@ -9,14 +9,28 @@ const PatientProfilePage = () => {
   const navigate = useNavigate();
   const { profile, setProfile } = usePatientProfile();
   const [form, setForm] = useState(profile);
+  const [profilePic, setProfilePic] = useState(profile.profilePic || profileIcon);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // Handle profile pic change
+  const handlePicChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePic(reader.result);
+        setForm((prev) => ({ ...prev, profilePic: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setProfile(form);
+    await setProfile(form);  // updates on backend/context
     alert("✅ Profile updated!");
     navigate('/account/patient');
   };
@@ -29,8 +43,25 @@ const PatientProfilePage = () => {
 
       <h2 className="profile-title">My Profile</h2>
 
-      <div className="account-header center">
-        <img src={profileIcon} alt="Profile" className="profile-icon" />
+      <div className="account-header center" style={{display:"flex",flexDirection:"column"}}>
+        <label htmlFor="profile-pic-upload" style={{ cursor: 'pointer' }}>
+          <img
+            src={profilePic}
+            alt="Profile"
+            className="profile-icon"
+            style={{ objectFit: 'cover', borderRadius: '50%' }}
+          />
+          <input
+            id="profile-pic-upload"
+            type="file"
+            accept="image/*"
+            style={{ display: 'none' }}
+            onChange={handlePicChange}
+          />
+        </label>
+        <div style={{ fontSize: '0.8em', color: '#975dbd', marginTop: 8 }}>
+          Click image to change
+        </div>
       </div>
 
       <h3 className="edit-heading">Edit Profile</h3>

@@ -6,6 +6,7 @@ import backArrow from '../../assets/back-arrow.png';
 
 import maleImg from '../../assets/gender-male.png';
 import femaleImg from '../../assets/gender-female.png';
+import axios from 'axios';
 
 const AStep2 = () => {
   const navigate = useNavigate();
@@ -13,9 +14,18 @@ const AStep2 = () => {
 
   const answer = answers[1]; // Step 2 = index 1
 
-  const handleSelect = (value) => {
-    saveAnswer(1, value);
-  };
+  const handleSelect = async (value) => {
+  saveAnswer(1, value);
+  const user_id = localStorage.getItem('user_id');
+  try {
+    await axios.post('http://localhost:5000/api/step2', {
+      user_id,
+      gender: value,
+    });
+  } catch (err) {
+    alert("❌ Failed to save Step 2");
+  }
+};
 
   return (
     <div className="step2-container">

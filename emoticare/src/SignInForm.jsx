@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import './SignInForm.css';
 
 import logoImg from './assets/logo.png';
@@ -6,13 +7,13 @@ import emailIcon from './assets/email-icon.png';
 import passwordIcon from './assets/password-icon.png';
 import eyeOpen from './assets/eye-open.png';
 import eyeClosed from './assets/eye-closed.png';
-import facebookIcon from './assets/facebook-icon.png';
 import googleIcon from './assets/google-icon.png';
-import instagramIcon from './assets/instagram-icon.png';
 import backArrow from './assets/back-arrow.png';
 
 import { useNavigate } from 'react-router-dom';
 import ForgotPasswordModal from './ForgotPasswordModal';
+
+import { GoogleLogin } from '@react-oauth/google';
 
 const SignInForm = ({ role }) => {
   const navigate = useNavigate();
@@ -21,6 +22,11 @@ const SignInForm = ({ role }) => {
   const [errors, setErrors] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
 
+  const handleGoogleSuccess = (credentialResponse) => {
+  console.log('Google response:', credentialResponse);
+  window.location.href = "http://localhost:5000/api/auth/google/callback";
+};
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -28,7 +34,7 @@ const SignInForm = ({ role }) => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = { email: false, password: false };
     let valid = true;
@@ -45,29 +51,26 @@ const SignInForm = ({ role }) => {
     setErrors(newErrors);
 
     if (valid) {
-      let isAuth = false;
+      try {
+        const res = await axios.post('http://localhost:5000/api/signin', {
+          email: formData.email,
+          password: formData.password,
+          role: role === 'admin' ? 'admins' : role + 's'
+        });
 
-      if (role === 'patient') {
-        const savedEmail = localStorage.getItem('demo_email');
-        const savedPassword = localStorage.getItem('demo_password');
-        isAuth = formData.email === savedEmail && formData.password === savedPassword;
-        if (isAuth) navigate('/assessment/step1');
-      }
+        // ✅ Save user_id
+        localStorage.setItem('user_id', res.data.user_id);
+        localStorage.setItem('userEmail', res.data.user_id);
+        localStorage.setItem('userRole', "patient");
 
-      if (role === 'therapist') {
-        isAuth = formData.email === 'therapist@emoticare.com' && formData.password === 'therapist@123';
-        if (isAuth) navigate('/dashboard/therapist');
-      }
+        alert(res.data.message);
 
-      if (role === 'admin') {
-        isAuth = formData.email === 'admin@emoticare.com' && formData.password === 'admin@123';
-        if (isAuth) navigate('/dashboard/admin');
-      }
-
-      if (isAuth) {
-        alert('✅ Login successful!');
-      } else {
-        alert('❌ Invalid email or password');
+        // 👉 Route based on role
+        if (role === 'patient') navigate('/assessment/step1');
+        else if (role === 'therapist') navigate('/dashboard/therapist');
+        else if (role === 'admin') navigate('/dashboard/admin');
+      } catch (err) {
+        alert(err.response?.data?.error || 'Login failed');
       }
     }
   };
@@ -130,9 +133,7 @@ const SignInForm = ({ role }) => {
 
         <div className="social-login-section">
           <div className="social-login-icons">
-            <button className="social-button"><img src={facebookIcon} alt="Facebook" /></button>
-            <button className="social-button"><img src={googleIcon} alt="Google" /></button>
-            <button className="social-button"><img src={instagramIcon} alt="Instagram" /></button>
+            <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => alert("Login Failed")} />
           </div>
         </div>
 

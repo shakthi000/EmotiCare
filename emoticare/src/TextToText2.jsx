@@ -1,47 +1,74 @@
-import React, { useState } from 'react';
-import './ChatCommon.css';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom"; // Assuming you pass therapistName in route
+import { io } from "socket.io-client";
+import "./ChatCommon.css";
+
+const socket = io("http://localhost:5000");
 
 const TextToText2 = () => {
-  const [messages, setMessages] = useState([{ sender: 'ai', text: "Hi, Jerry" }]);
-  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState("");
+
+  const { therapistName } = useParams(); // or hardcode if always same
+  const userName = sessionStorage.getItem("user_id") || "shakthi"; // <- real patient name
+  const room = `room-${userName.toLowerCase()}`;
+
+
+  useEffect(() => {
+  // 🔁 Emit join
+  socket.emit("join", { room, username: "PATIENT" });
+
+  // 🔔 Add "joined" message once
+  setMessages((prev) => [
+    ...prev,
+    { from: "system", text: `You joined the room: ${room}` },
+  ]);
+
+  // 🎧 Listen to new messages
+  socket.on("message", (msg) => {
+    console.log("💬 Received:", msg); // for debugging
+    setMessages((prev) => [...prev, msg]);
+  });
+
+  return () => {
+    socket.off("message");
+  };
+}, [room]);
+
 
   const sendMessage = () => {
-    if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
-      setInput('');
-      setTimeout(() => {
-        setMessages(prev => [...prev, { sender: 'ai', text: "How's your day?" }]);
-      }, 500);
-    }
-    if (input.trim()) {
-      setMessages([...messages, { sender: 'user', text: input }]);
-      setInput('');
-      setTimeout(() => {
-        setMessages(prev => [...prev, { sender: 'ai', text: "What's going on lately?" }]);
-      }, 500);
-    }
-}
-
+  if (!input.trim()) return;
+  socket.emit("send_message", {
+    room,
+    sender: "PATIENT",
+    text: input,
+  });
+  setInput("");
+};
 
   return (
     <div className="chat-container">
-      <div className="chat-header">Text to Text <span className="chat-status">Ready</span></div>
+      <div className="chat-header">Talk to {therapistName}</div>
 
       <div className="chat-body">
-        {messages.map((msg, i) => (
-          <div key={i} className={`chat-bubble ${msg.sender}`}>
-            {msg.text}
-          </div>
-        ))}
+        {messages.map((msg, i) => {
+          const sender = msg.from || msg.sender || "unknown";  // fallback
+          return (
+            <div key={i} className={`chat-bubble ${sender.toLowerCase()}`}>
+              {msg.text}
+            </div>
+          );
+        })}
       </div>
+
 
       <div className="chat-input">
         <input
           type="text"
-          placeholder="Send a message ..."
+          placeholder="Send a message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button onClick={sendMessage}>➤</button>
       </div>

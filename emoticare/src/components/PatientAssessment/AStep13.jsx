@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import backArrow from '../../assets/back-arrow.png';
 import aiSoundIcon from '../../assets/ai-sound-circle.png';
 import { useAssessment } from '../../context/AssessmentContext';
+import axios from 'axios';
 
 const AStep13 = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const AStep13 = () => {
   let recognition;
 
   useEffect(() => {
+  const setupRecognition = () => {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       recognition = new SpeechRecognition();
@@ -21,10 +23,21 @@ const AStep13 = () => {
       recognition.continuous = false;
       recognition.interimResults = false;
 
-      recognition.onresult = (event) => {
+      recognition.onresult = async (event) => {
         const transcript = event.results[0][0].transcript;
         setRecordedText(transcript);
-        saveAnswer(12, transcript); // Step 13 = index 12
+        saveAnswer(12, transcript);
+
+        const user_id = localStorage.getItem("user_id");
+        try {
+          await axios.post("http://localhost:5000/api/step13", {
+            user_id,
+            phrase: transcript,
+          });
+        } catch (err) {
+          alert("❌ Failed to save Step 13");
+        }
+
         setIsRecording(false);
       };
 
@@ -35,7 +48,10 @@ const AStep13 = () => {
     } else {
       alert('Voice recognition not supported in this browser.');
     }
-  }, []);
+  };
+
+  setupRecognition();
+}, []);
 
   const handleStartListening = () => {
     if (recognition) {

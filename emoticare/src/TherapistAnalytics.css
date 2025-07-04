@@ -63,14 +63,8 @@
 .bottom-nav button {
   background: transparent;
   border: none;
+  font-size: 14px;
   color: #975dbd;
-  font-size: 16px;
+  text-align: center;
   cursor: pointer;
-}
-.bottom-nav button.active {
-  font-weight: bold;
-  border-bottom: 2px solid #975dbd;
-}
-.bottom-nav button :hover {
-  color: #7a4c9e;
 }

@@ -3,6 +3,7 @@ import './AStep4.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext.jsx';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const AStep4 = () => {
   const navigate = useNavigate();
@@ -11,10 +12,22 @@ const AStep4 = () => {
   const [unit, setUnit] = useState('kg');
   const [weight, setWeight] = useState(answers[3] || 128);
 
-  const handleNext = () => {
-    saveAnswer(3, `${weight} ${unit}`);
+  const handleNext = async () => {
+  const selected = `${weight} ${unit}`;
+  saveAnswer(3, selected);
+
+  try {
+    const user_id = localStorage.getItem("user_id");
+    await axios.post("http://localhost:5000/api/step4", {
+      user_id,
+      weight: selected
+    });
     navigate('/assessment/step5');
-  };
+  } catch (err) {
+    alert("❌ Error saving Step 4");
+  }
+};
+
 
   const weightRange = Array.from({ length: 100 }, (_, i) => i + (unit === 'kg' ? 40 : 90)); // 40-139 kg or 90–189 lbs
 

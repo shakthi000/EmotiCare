@@ -3,6 +3,7 @@ import './AStep12.css';
 import { useNavigate } from 'react-router-dom';
 import { useAssessment } from '../../context/AssessmentContext';
 import backArrow from '../../assets/back-arrow.png';
+import axios from 'axios';
 
 const stressLevels = [
   'Very Low',
@@ -17,7 +18,18 @@ const AStep12 = () => {
   const { answers, saveAnswer } = useAssessment();
   const answer = answers[11] || 3; // Default to middle value
 
-  const handleSelect = (val) => saveAnswer(11, val);
+  const handleSelect = async (val) => {
+  saveAnswer(11, val);
+  const user_id = localStorage.getItem("user_id");
+  try {
+    await axios.post("http://localhost:5000/api/step12", {
+      user_id,
+      stress: val
+    });
+  } catch (err) {
+    alert("❌ Failed to save Step 12");
+  }
+};
 
   return (
     <div className="step12-container">

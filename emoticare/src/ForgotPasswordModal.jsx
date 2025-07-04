@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './SignInForm.css';
 import otpImage from './assets/otpimg.png';
 import { IoMdClose } from 'react-icons/io';
+import axios from 'axios';
 
 const ForgotPasswordModal = ({ onClose }) => {
   const [email, setEmail] = useState('');
@@ -9,25 +10,24 @@ const ForgotPasswordModal = ({ onClose }) => {
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setError('');
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError('');
 
-    if (!validateEmail(email)) {
-      setError('Invalid email format!');
-      return;
-    }
+  if (!validateEmail(email)) {
+    setError('Invalid email format!');
+    return;
+  }
 
-    const storedEmail = localStorage.getItem('demo_email');
-
-    if (email === storedEmail) {
-      alert('📩 OTP has been sent to your email!');
-      // Later: navigate to OTP page
-      onClose();
-    } else {
-      setError('❌ Email not registered!');
-    }
-  };
+  try {
+    const res = await axios.post("http://localhost:5000/api/forgot-password", { email });
+    alert(res.data.message); // shows "OTP sent to your email"
+    onClose(); // optionally close the modal
+  } catch (err) {
+    const msg = err.response?.data?.error || 'Something went wrong';
+    setError(`❌ ${msg}`);
+  }
+};
 
   return (
     <div className="modal-overlay">
