@@ -1,136 +1,108 @@
 import eventlet
 eventlet.monkey_patch()
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for, session
 from flask_cors import CORS
-import random
-from flask import redirect, url_for, session
-from flask_oauthlib.client import OAuth
+from authlib.integrations.flask_client import OAuth
 from flask_socketio import SocketIO, emit, join_room
-
+from dotenv import load_dotenv
+import random, requests, os
 from datetime import datetime
 from collections import defaultdict
-import requests
-import os 
 
-from dotenv import load_dotenv
 load_dotenv()
 
-# 🔧 Flask Setup
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "shakthiSuperSecretKey123")
-CORS(app)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "super-secret")
+CORS(app, supports_credentials=True)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+# --- Authlib OAuth Setup ---
 oauth = OAuth(app)
-print("🔐 CLIENT_ID:", os.getenv("GOOGLE_CLIENT_ID"))
-print("🔐 CLIENT_SECRET:", os.getenv("GOOGLE_CLIENT_SECRET"))
+app.config['GOOGLE_CLIENT_ID'] = os.getenv("GOOGLE_CLIENT_ID")
+app.config['GOOGLE_CLIENT_SECRET'] = os.getenv("GOOGLE_CLIENT_SECRET")
+app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
-
-google = oauth.remote_app(
-    'google',
-    consumer_key=os.getenv("GOOGLE_CLIENT_ID"),
-    consumer_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
-    request_token_params={
-        'scope': 'email profile',
-    },
-    base_url='https://www.googleapis.com/oauth2/v1/',
-    request_token_url=None,
-    access_token_method='POST',
-    access_token_url='https://accounts.google.com/o/oauth2/token',
-    authorize_url='https://accounts.google.com/o/oauth2/auth',
+google = oauth.register(
+    name='google',
+    client_id=app.config['GOOGLE_CLIENT_ID'],
+    client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+    access_token_url='https://oauth2.googleapis.com/token',
+    access_token_params=None,
+    authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
+    authorize_params=None,
+    api_base_url='https://openidconnect.googleapis.com/v1/',
+    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
+    client_kwargs={'scope': 'openid email profile'},
 )
-
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
 # In-memory DB
 users_db = {
     "patients": [],
-    "therapists": [{"email": "therapist@emoticare.com", "password": "therapist@123"}],
-    "admins": [{"email": "admin@emoticare.com", "password": "admin@123"}],
+    "therapists": [],
+    "admins": [],
     "assessment_data": {},
     "mood_history": {}
 }
 user_profiles = {}
-user_otp_store = {}
 
-# 🔐 Auth
+# Utility to find a user
 def find_user(email, role):
     return next((user for user in users_db[role] if user["email"] == email), None)
 
-# OAuth (Google)
+# ------------------ OAuth Routes ------------------
+
 @app.route('/api/auth/google')
 def google_login():
-    return google.authorize(callback=url_for('google_callback', _external=True))
+    redirect_uri = url_for('google_callback', _external=True)
+    return google.authorize_redirect(redirect_uri)
 
 @app.route('/api/auth/google/callback')
 def google_callback():
-    resp = google.authorized_response()
-    if resp is None or resp.get('access_token') is None:
-        return 'Access denied', 400
-
-    session['google_token'] = (resp['access_token'], '')
-    user_info = google.get('userinfo')
-    email = user_info.data['email']
+    token = google.authorize_access_token()
+    userinfo = google.parse_id_token(token)
+    email = userinfo['email']
 
     # Auto-register if not exists
     if not find_user(email, 'patients'):
         users_db['patients'].append({'email': email, 'password': 'oauth'})
         user_profiles[email] = {
-            "firstName": email.split('@')[0].capitalize(), "lastName": "",
-            "email": email, "phone": "", "birth": "", "gender": ""
+            "firstName": email.split('@')[0].capitalize(),
+            "lastName": "", "email": email, "phone": "", "birth": "", "gender": ""
         }
 
-    return redirect(f'http://localhost:5000/assessment/step1')  # Or any frontend page
+    # Send info to frontend (postMessage for popup flow)
+    return f"""
+    <script>
+    window.opener.postMessage({{
+        success: true,
+        email: "{email}"
+    }}, "*");
+    window.close();
+    </script>
+    """
 
-@google.tokengetter
-def get_google_oauth_token():
-    return session.get('google_token')
 
-# Forgot Password Modal
-@app.route("/api/forgot-password", methods=["POST"])
-def forgot_password():
-    data = request.json
-    email = data.get("email")
 
-    if not email:
-        return jsonify({"error": "Email is required"}), 400
-
-    # Check if email exists in any user role
-    user_exists = any(
-        email == user["email"]
-        for role in ["patients", "therapists", "admins"]
-        for user in users_db[role]
-    )
-
-    if not user_exists:
-        return jsonify({"error": "Email not registered"}), 404
-
-    # Simulate OTP generation and email sending
-    otp = str(random.randint(100000, 999999))
-    user_otp_store[email] = otp
-    print(f"🔐 OTP for {email}: {otp}")  # You can later replace with actual email service
-
-    return jsonify({"message": "OTP sent to your email!"}), 200
+# ------------------ Auth Routes ------------------
 
 @app.route("/api/signup", methods=["POST"])
 def signup():
     data = request.json
-    email, password, role = data.get("email"), data.get("password"), data.get("role")
+    email, password, role = data.get("email"), data.get("password"), data.get("role", "patients")
     if find_user(email, role):
         return jsonify({"error": "User already exists"}), 409
     users_db[role].append({"email": email, "password": password})
     user_profiles[email] = {
         "firstName": email.split('@')[0].capitalize(),
-        "lastName": "", "username": "", "email": email,
-        "phone": "", "birth": "", "gender": ""
+        "lastName": "", "email": email, "phone": "", "birth": "", "gender": ""
     }
     return jsonify({"message": f"{role[:-1].capitalize()} signed up successfully ✅!"}), 201
 
 @app.route("/api/signin", methods=["POST"])
 def signin():
     data = request.json
-    email, password, role = data.get("email"), data.get("password"), data.get("role")
+    email, password, role = data.get("email"), data.get("password"), data.get("role", "patients")
     user = find_user(email, role)
     if not user or user["password"] != password:
         return jsonify({"error": "Invalid credentials"}), 401
@@ -144,6 +116,15 @@ def handle_step(user_id, step_key, value):
     return True
 
 # Step 1–14 Routes
+def make_step_route(step_key, field):
+    def route():
+        data = request.json
+        user_id, value = data.get("user_id"), data.get(field)
+        if not handle_step(user_id, step_key, value):
+            return jsonify({"error": f"Missing user_id or {field}"}), 400
+        return jsonify({"message": f"{step_key} saved"}), 200
+    return route
+
 for i in range(1, 15):
     step_key = f"step{i}"
     field = (
@@ -169,16 +150,12 @@ for i in range(1, 15):
             return inner
         app.add_url_rule(f"/api/step{i}", f"step{i}", mood_route(), methods=["POST"])
     else:
-        app.add_url_rule(f"/api/step{i}", f"step{i}",
-                         lambda i=i, f=field: _handle_step_route(f"step{i}", f),
-                         methods=["POST"])
-
-def _handle_step_route(step_key, field):
-    data = request.json
-    user_id, value = data.get("user_id"), data.get(field)
-    if not handle_step(user_id, step_key, value):
-        return jsonify({"error": f"Missing user_id or {field}"}), 400
-    return jsonify({"message": f"{step_key} saved"}), 200
+        app.add_url_rule(
+            f"/api/step{i}",
+            f"step{i}",
+            make_step_route(f"step{i}", field),
+            methods=["POST"]
+        )
 
 # 📊 Analytics
 @app.route("/api/patient/analytics", methods=["GET"])
@@ -254,11 +231,11 @@ def dashboard():
     }), 200
 
 # ---------------- Therapist APIs ---------------- #
-# 🤖 Therapist AI Chat
 @app.route("/api/chat/therapist", methods=["POST"])
 def chat_therapist():
     data = request.json
     message = data.get("message")
+    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
     if not message:
         return jsonify({"error": "Message required"}), 400
 
@@ -270,16 +247,13 @@ def chat_therapist():
                 "Content-Type": "application/json"
             },
             json={
-                "model": "mistralai/mistral-7b-instruct:free",  # You can try other free models too
+                "model": "mistralai/mistral-7b-instruct:free",
                 "messages": [
                     {"role": "system", "content": "You are a kind and helpful therapist."},
                     {"role": "user", "content": message}
                 ]
             }
         )
-
-        print("🔎 AI Response Status:", response.status_code)
-        print("🧾 AI Response Body:", response.text)
 
         res_data = response.json()
         if "choices" in res_data:
@@ -289,11 +263,7 @@ def chat_therapist():
             return jsonify({ "error": res_data.get("error", "No reply returned") }), 500
 
     except Exception as e:
-        print("🔥 AI Exception:", e)
         return jsonify({ "error": str(e) }), 500
-
-
-# 🔁 Therapist map of patient names to their user_id/email
 
 therapist_patient_map = {
     "SHAKTHI": "shakthi@demo.com", 
@@ -301,7 +271,6 @@ therapist_patient_map = {
     "VIGNESH": "vignesh@demo.com",
     "YUVASRI": "yuvasri@demo.com",
 }
-
 
 @app.route("/api/therapist/analytics", methods=["GET"])
 def get_patient_analytics():
@@ -318,15 +287,13 @@ def get_patient_analytics():
 @app.route("/api/admin/dashboard", methods=["GET"])
 def get_admin_dashboard():
     total_patients = len(users_db["patients"])
-    active_patients = int(total_patients * 1)  # example calculation
-    new_patients = int(total_patients * 0.24)     # example calculation
-
+    active_patients = int(total_patients * 1)
+    new_patients = int(total_patients * 0.24)
     return jsonify({
         "total": total_patients,
         "active": active_patients,
         "new": new_patients
     })
-
 
 @app.route("/api/admin/patients", methods=["GET", "POST"])
 def manage_patients():
@@ -350,7 +317,6 @@ def manage_patients():
         }
         return jsonify({"message": "Patient added"}), 201
 
-
 @app.route("/api/admin/therapists", methods=["GET", "POST"])
 def manage_therapists():
     if request.method == "GET":
@@ -371,7 +337,6 @@ def manage_therapists():
         users_db["therapists"].append({"email": email, "password": "therapist@123"})
         return jsonify({"message": "Therapist added"}), 201
 
-
 @app.route("/api/admin/reports", methods=["GET"])
 def admin_reports():
     return jsonify({
@@ -379,7 +344,7 @@ def admin_reports():
         "patients": len(users_db["patients"]),
         "satisfaction": "85%",
         "growth": "+5%",
-        "chart": [25, 30, 35]  # Jan, Feb, Mar sample
+        "chart": [25, 30, 35]
     })
 
 # --------------------------------------------

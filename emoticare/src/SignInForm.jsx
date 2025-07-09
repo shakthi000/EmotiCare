@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './SignInForm.css';
 
@@ -13,8 +13,6 @@ import backArrow from './assets/back-arrow.png';
 import { useNavigate } from 'react-router-dom';
 import ForgotPasswordModal from './ForgotPasswordModal';
 
-import { GoogleLogin } from '@react-oauth/google';
-
 const SignInForm = ({ role }) => {
   const navigate = useNavigate();
   const [showForgot, setShowForgot] = useState(false);
@@ -22,10 +20,31 @@ const SignInForm = ({ role }) => {
   const [errors, setErrors] = useState({ email: false, password: false });
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleGoogleSuccess = (credentialResponse) => {
-  console.log('Google response:', credentialResponse);
-  window.location.href = "http://localhost:5000/api/auth/google/callback";
-};
+  // Listen for Google OAuth popup message
+  // filepath: c:\Users\DELL\Desktop\shakthi\EmotiCare\emoticare\src\SignInForm.jsx
+  useEffect(() => {
+  const handleOAuthMessage = (event) => {
+    console.log("OAuth message received:", event);
+    // if (event.origin !== window.location.origin) return;
+    const { success, email } = event.data;
+    if (success && email) {
+      localStorage.setItem('user_id', email);
+      localStorage.setItem('userEmail', email);
+      localStorage.setItem('userRole', "patient");
+      window.location.href = window.location.origin + '/assessment/step1';
+    }
+  };
+  window.addEventListener('message', handleOAuthMessage);
+  return () => window.removeEventListener('message', handleOAuthMessage);
+}, []);
+
+  const handleGoogleLogin = () => {
+    window.open(
+      "http://localhost:5000/api/auth/google",
+      "Login with Google",
+      "width=500,height=600"
+    );
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,14 +77,12 @@ const SignInForm = ({ role }) => {
           role: role === 'admin' ? 'admins' : role + 's'
         });
 
-        // ✅ Save user_id
         localStorage.setItem('user_id', res.data.user_id);
         localStorage.setItem('userEmail', res.data.user_id);
-        localStorage.setItem('userRole', "patient");
+        localStorage.setItem('userRole', role);
 
         alert(res.data.message);
 
-        // 👉 Route based on role
         if (role === 'patient') navigate('/assessment/step1');
         else if (role === 'therapist') navigate('/dashboard/therapist');
         else if (role === 'admin') navigate('/dashboard/admin');
@@ -133,7 +150,10 @@ const SignInForm = ({ role }) => {
 
         <div className="social-login-section">
           <div className="social-login-icons">
-            <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => alert("Login Failed")} />
+            <button className="google-button" onClick={handleGoogleLogin}>
+              <img src={googleIcon} alt="Google" />
+              Sign in with Google
+            </button>
           </div>
         </div>
 

@@ -3,7 +3,7 @@ import './ChatCommon.css';
 
 const SpeechToText = () => {
   const [transcript, setTranscript] = useState('');
-  const [messages, setMessages] = useState([{ sender: 'ai', text: "Hi, Jerry!" }]);
+  const [messages, setMessages] = useState([{ sender: 'ai', text: "" }]);
   const recognitionRef = useRef(null);
 
   useEffect(() => {

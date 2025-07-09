@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const TextToSpeech = () => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([{ sender: 'ai', text: "Hi, Jerry" }]);
+  const [messages, setMessages] = useState([{ sender: 'ai', text: "" }]);
 
   const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);

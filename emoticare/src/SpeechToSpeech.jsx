@@ -3,7 +3,7 @@ import './ChatCommon.css';
 import axios from 'axios';
 
 const SpeechToSpeech = () => {
-  const [messages, setMessages] = useState([{ sender: 'AI', text: "Hi Jerry, how's your day?" }]);
+  const [messages, setMessages] = useState([{ sender: 'AI', text: "" }]);
   const [recording, setRecording] = useState(false);
   const recognitionRef = useRef(null);
 
