@@ -1,10 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ChatCommon.css';
 import axios from 'axios';
 
 const TextToSpeech = () => {
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([{ sender: 'ai', text: "" }]);
+  const [messages, setMessages] = useState([]);
+  const userId = localStorage.getItem('user_id') || 'guest';
+
+  useEffect(() => {
+    const stored = localStorage.getItem(`ai_chat_${userId}`);
+    if (stored) {
+      setMessages(JSON.parse(stored));
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    localStorage.setItem(`ai_chat_${userId}`, JSON.stringify(messages));
+  }, [messages, userId]);
 
   const speak = (text) => {
     const utterance = new SpeechSynthesisUtterance(text);
@@ -12,18 +24,18 @@ const TextToSpeech = () => {
   };
 
   const sendMessage = async () => {
-  if (input.trim()) {
-    const userMessage = input;
-    setMessages([...messages, { sender: 'user', text: userMessage }]);
+    if (!input.trim()) return;
+
+    const userMessage = { sender: 'user', text: input };
+    setMessages(prev => [...prev, userMessage]);
     setInput('');
 
-    const res = await axios.post('http://localhost:5000/api/chat/therapist', { message: userMessage });
-    const aiResponse = res.data.reply;
+    const res = await axios.post('http://localhost:5000/api/chat/therapist', { message: input });
+    const aiMessage = { sender: 'ai', text: res.data.reply };
 
-    setMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
-    speak(aiResponse);
-  }
-};
+    setMessages(prev => [...prev, aiMessage]);
+    speak(res.data.reply);
+  };
 
   return (
     <div className="chat-container">

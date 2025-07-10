@@ -3,22 +3,34 @@ import './ChatCommon.css';
 import axios from 'axios';
 
 const SpeechToSpeech = () => {
-  const [messages, setMessages] = useState([{ sender: 'AI', text: "" }]);
+  const [messages, setMessages] = useState([]);
   const [recording, setRecording] = useState(false);
   const recognitionRef = useRef(null);
+  const userId = localStorage.getItem('user_id') || 'guest';
 
   useEffect(() => {
-    // Initialize SpeechRecognition only once
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.lang = 'en-US';
     recognitionRef.current.interimResults = false;
 
-    // Clean up on unmount
     return () => {
       recognitionRef.current.abort();
     };
   }, []);
+
+  // Load from localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem(`ai_chat_${userId}`);
+    if (stored) {
+      setMessages(JSON.parse(stored));
+    }
+  }, [userId]);
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem(`ai_chat_${userId}`, JSON.stringify(messages));
+  }, [messages, userId]);
 
   const fetchReply = async (message) => {
     const res = await axios.post('http://localhost:5000/api/chat/therapist', { message });
@@ -32,11 +44,12 @@ const SpeechToSpeech = () => {
 
       recognitionRef.current.onresult = async (event) => {
         const userText = event.results[0][0].transcript;
-
-        setMessages(prev => [...prev, { sender: 'User', text: userText }]);
+        const userMsg = { sender: 'user', text: userText };
+        setMessages(prev => [...prev, userMsg]);
 
         const reply = await fetchReply(userText);
-        setMessages(prev => [...prev, { sender: 'AI', text: reply }]);
+        const aiMsg = { sender: 'ai', text: reply };
+        setMessages(prev => [...prev, aiMsg]);
 
         const utter = new SpeechSynthesisUtterance(reply);
         window.speechSynthesis.speak(utter);
@@ -47,7 +60,6 @@ const SpeechToSpeech = () => {
         console.error('Speech recognition error:', err);
         setRecording(false);
       };
-
     } else {
       recognitionRef.current.stop();
       setRecording(false);

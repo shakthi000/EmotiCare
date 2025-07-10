@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import "./TherapistChatPage.css";
+import axios from 'axios';
 
 const socket = io("http://localhost:5000"); // Socket connection
 
@@ -12,17 +13,25 @@ const TherapistChatPage = () => {
   const room = `room-${patientName.toLowerCase()}`;
 
   useEffect(() => {
-    setMessages([{ from: "system", text: `You joined the room: ${room}` }]);
-    socket.emit("join", { room, username: "THERAPIST" });
+  const room = `room-${patientName.toLowerCase()}`;
+  axios.get("http://localhost:5000/api/chat/history", {
+    params: { room }
+  }).then(res => {
+    const hist = res.data.therapist_chat || [];
+    const formatted = hist.map(([sender, text]) => ({ from: sender, text }));
+    setMessages(prev => [...formatted, ...prev]);
+  });
 
-    socket.on("message", (msg) => {
-      setMessages((prev) => [...prev, msg]);
-    });
+  socket.emit("join", { room, username: "THERAPIST" });
 
-    return () => {
-      socket.off("message");
-    };
-  }, [room]);
+  socket.on("message", (msg) => {
+    setMessages((prev) => [...prev, msg]);
+  });
+
+  return () => {
+    socket.off("message");
+  };
+}, [room]);
 
   const sendMessage = () => {
     if (!input.trim()) return;

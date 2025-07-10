@@ -3,8 +3,9 @@ import './ChatCommon.css';
 
 const SpeechToText = () => {
   const [transcript, setTranscript] = useState('');
-  const [messages, setMessages] = useState([{ sender: 'ai', text: "" }]);
+  const [messages, setMessages] = useState([]);
   const recognitionRef = useRef(null);
+  const userId = localStorage.getItem('user_id') || 'guest';
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -12,10 +13,21 @@ const SpeechToText = () => {
     recognitionRef.current.lang = 'en-US';
     recognitionRef.current.interimResults = false;
 
-    return () => {
-      recognitionRef.current.abort();
-    };
+    return () => recognitionRef.current.abort();
   }, []);
+
+  // Load history
+  useEffect(() => {
+    const stored = localStorage.getItem(`ai_chat_${userId}`);
+    if (stored) {
+      setMessages(JSON.parse(stored));
+    }
+  }, [userId]);
+
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem(`ai_chat_${userId}`, JSON.stringify(messages));
+  }, [messages, userId]);
 
   const handleSpeech = () => {
     recognitionRef.current.start();
@@ -23,12 +35,10 @@ const SpeechToText = () => {
     recognitionRef.current.onresult = (event) => {
       const text = event.results[0][0].transcript;
       setTranscript(text);
-      setMessages(prev => [...prev, { sender: 'user', text }]);
+      const userMsg = { sender: 'user', text };
+      const aiMsg = { sender: 'ai', text: "Got it! 😊" };
 
-      // Simulate AI reply (optional)
-      setTimeout(() => {
-        setMessages(prev => [...prev, { sender: 'ai', text: "Got it! 😊" }]);
-      }, 800);
+      setMessages(prev => [...prev, userMsg, aiMsg]);
     };
 
     recognitionRef.current.onerror = (e) => {

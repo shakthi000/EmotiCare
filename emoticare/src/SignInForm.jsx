@@ -150,7 +150,7 @@ const SignInForm = ({ role }) => {
 
         <div className="social-login-section">
           <div className="social-login-icons">
-            <button className="google-button" onClick={handleGoogleLogin}>
+            <button className="google-button" onClick={handleGoogleLogin} >
               <img src={googleIcon} alt="Google" />
               Sign in with Google
             </button>

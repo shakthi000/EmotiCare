@@ -39,7 +39,7 @@ const NewSignUp = ({ role }) => {
       localStorage.setItem('userEmail', email);
       localStorage.setItem('userRole', "patient");
       window.location.href = window.location.origin + '/assessment/step1';
-    }
+    } 
   };
   window.addEventListener('message', handleOAuthMessage);
   return () => window.removeEventListener('message', handleOAuthMessage);

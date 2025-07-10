@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom"; // Assuming you pass therapistName in route
 import { io } from "socket.io-client";
 import "./ChatCommon.css";
+import axios from 'axios';
 
 const socket = io("http://localhost:5000");
 
@@ -15,6 +16,16 @@ const TextToText2 = () => {
 
 
   useEffect(() => {
+    const user_id = localStorage.getItem("user_id");
+axios.get("http://localhost:5000/api/chat/history", {
+  params: { user_id, room }
+})
+.then(res => {
+  const hist = res.data.therapist_chat || [];
+  const formatted = hist.map(([sender, text]) => ({ from: sender, text }));
+  setMessages(prev => [...formatted, ...prev]);
+});
+
   // 🔁 Emit join
   socket.emit("join", { room, username: "PATIENT" });
 

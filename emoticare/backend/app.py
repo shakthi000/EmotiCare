@@ -4,11 +4,22 @@ eventlet.monkey_patch()
 from flask import Flask, request, jsonify, redirect, url_for, session
 from flask_cors import CORS
 from authlib.integrations.flask_client import OAuth
+from authlib.common.security import generate_token
 from flask_socketio import SocketIO, emit, join_room
 from dotenv import load_dotenv
 import random, requests, os
 from datetime import datetime
 from collections import defaultdict
+
+from langchain.memory import ConversationBufferMemory
+from langchain.schema import HumanMessage, AIMessage
+from langchain.chat_models import ChatOpenAI
+
+# In-memory Chat Logs
+chat_memory_store = {
+    "ai_chats": {},         # key: user_id, value: list of (user, ai) tuples
+    "therapist_chats": {}   # key: room, value: list of (sender, text)
+}
 
 load_dotenv()
 
@@ -25,16 +36,20 @@ app.config['SESSION_COOKIE_SAMESITE'] = "Lax"
 
 google = oauth.register(
     name='google',
-    client_id=app.config['GOOGLE_CLIENT_ID'],
-    client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+    client_id=os.getenv("GOOGLE_CLIENT_ID"),
+    client_secret=os.getenv("GOOGLE_CLIENT_SECRET"),
     access_token_url='https://oauth2.googleapis.com/token',
-    access_token_params=None,
     authorize_url='https://accounts.google.com/o/oauth2/v2/auth',
-    authorize_params=None,
-    api_base_url='https://openidconnect.googleapis.com/v1/',
-    userinfo_endpoint='https://openidconnect.googleapis.com/v1/userinfo',
-    client_kwargs={'scope': 'openid email profile'},
+    api_base_url='https://www.googleapis.com/oauth2/v2/',
+    client_kwargs={
+        'scope': 'openid email profile',
+        'access_type': 'offline'
+    },
+    server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+    # Optional override (can help fix metadata fetch issues)
+    userinfo_endpoint='https://www.googleapis.com/oauth2/v3/userinfo'
 )
+
 
 # In-memory DB
 users_db = {
@@ -42,7 +57,9 @@ users_db = {
     "therapists": [],
     "admins": [],
     "assessment_data": {},
-    "mood_history": {}
+    "mood_history": {},
+    "ai_chat_history": defaultdict(list),
+    "therapist_chat_history": defaultdict(list)
 }
 user_profiles = {}
 
@@ -59,11 +76,14 @@ def google_login():
 
 @app.route('/api/auth/google/callback')
 def google_callback():
-    token = google.authorize_access_token()
-    userinfo = google.parse_id_token(token)
-    email = userinfo['email']
+    try:
+        token = google.authorize_access_token()
+        resp = google.get('userinfo')
+        userinfo = resp.json()
+        email = userinfo['email']
+    except Exception as e:
+        return f"<script>window.opener.postMessage({{ success: false, error: '{str(e)}' }}, '*'); window.close();</script>"
 
-    # Auto-register if not exists
     if not find_user(email, 'patients'):
         users_db['patients'].append({'email': email, 'password': 'oauth'})
         user_profiles[email] = {
@@ -71,7 +91,6 @@ def google_callback():
             "lastName": "", "email": email, "phone": "", "birth": "", "gender": ""
         }
 
-    # Send info to frontend (postMessage for popup flow)
     return f"""
     <script>
     window.opener.postMessage({{
@@ -81,8 +100,6 @@ def google_callback():
     window.close();
     </script>
     """
-
-
 
 # ------------------ Auth Routes ------------------
 
@@ -235,9 +252,12 @@ def dashboard():
 def chat_therapist():
     data = request.json
     message = data.get("message")
-    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+    user_id = request.args.get("user_id") or request.json.get("user_id")  # Support both
+
     if not message:
         return jsonify({"error": "Message required"}), 400
+
+    OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
     try:
         response = requests.post(
@@ -254,16 +274,18 @@ def chat_therapist():
                 ]
             }
         )
-
         res_data = response.json()
-        if "choices" in res_data:
-            reply = res_data["choices"][0]["message"]["content"]
-            return jsonify({ "reply": reply })
-        else:
-            return jsonify({ "error": res_data.get("error", "No reply returned") }), 500
+        reply = res_data["choices"][0]["message"]["content"]
+
+        # 🧠 Save AI chat history
+        if user_id:
+            users_db["ai_chat_history"].setdefault(user_id, []).append((message, reply))
+
+        return jsonify({ "reply": reply })
 
     except Exception as e:
         return jsonify({ "error": str(e) }), 500
+
 
 therapist_patient_map = {
     "SHAKTHI": "shakthi@demo.com", 
@@ -354,20 +376,43 @@ def admin_reports():
 @socketio.on("join")
 def join_room_event(data):
     join_room(data["room"])
-    emit("message", {
-        "from": "system", "text": f"{data['username']} joined the room."
-    }, to=data["room"])
+    system_msg = f"{data['username']} joined the room."
+    emit("message", {"from": "system", "text": system_msg}, to=data["room"])
+
+    # Store the join message
+    chat_memory_store["therapist_chats"].setdefault(data["room"], []).append(("system", system_msg))
 
 @socketio.on("send_message")
 def send_message(data):
+    room = data.get("room")
+    sender = data.get("sender")
+    text = data.get("text")
+
     emit("message", {
-        "from": data["sender"],
-        "text": data["text"]
-    }, to=data["room"])
+        "from": sender,
+        "text": text
+    }, to=room)
+
+    # 💾 Save message to therapist_chat_history
+    if room:
+        users_db["therapist_chat_history"].setdefault(room, []).append((sender, text))
+
+@app.route("/api/chat/history", methods=["GET"])
+def get_chat_history():
+    user_id = request.args.get("user_id")
+    room = request.args.get("room")
+
+    ai_chat = users_db["ai_chat_history"].get(user_id, [])
+    therapist_chat = users_db["therapist_chat_history"].get(room, [])
+
+    return jsonify({
+        "ai_chat": ai_chat,
+        "therapist_chat": therapist_chat
+    }), 200
 
 # --------------------------------------------
 # 🏁 Run the Server
 # --------------------------------------------
 
 if __name__ == "__main__":
-    socketio.run(app, host='0.0.0.0', debug=True, port=5000, use_reloader=False)
+  socketio.run(app, host='0.0.0.0', debug=True, port=5000, use_reloader=False)
