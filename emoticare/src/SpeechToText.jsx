@@ -10,7 +10,7 @@ const SpeechToText = () => {
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     recognitionRef.current = new SpeechRecognition();
-    recognitionRef.current.lang = 'en-US';
+    recognitionRef.current.lang = 'en-US','UTF-8';
     recognitionRef.current.interimResults = false;
 
     return () => recognitionRef.current.abort();

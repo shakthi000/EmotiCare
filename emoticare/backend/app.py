@@ -3,6 +3,8 @@ eventlet.monkey_patch()
 
 from flask import Flask, request, jsonify, redirect, url_for, session
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 from authlib.integrations.flask_client import OAuth
 from authlib.common.security import generate_token
 from flask_socketio import SocketIO, emit, join_room
@@ -26,6 +28,18 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "super-secret")
 CORS(app, supports_credentials=True)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///emoticare.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    role = db.Column(db.String(50), nullable=False)
+db.init_app(app)
+
+with app.app_context():
+    db.create_all()
 socketio = SocketIO(app, cors_allowed_origins="*")
 
 # --- Authlib OAuth Setup ---
@@ -84,8 +98,10 @@ def google_callback():
     except Exception as e:
         return f"<script>window.opener.postMessage({{ success: false, error: '{str(e)}' }}, '*'); window.close();</script>"
 
-    if not find_user(email, 'patients'):
-        users_db['patients'].append({'email': email, 'password': 'oauth'})
+    if not User.query.filter_by(email=email, role='patients').first():
+        new_user = User(email=email, password='oauth', role='patients')
+        db.session.add(new_user)
+        db.session.commit()
         user_profiles[email] = {
             "firstName": email.split('@')[0].capitalize(),
             "lastName": "", "email": email, "phone": "", "birth": "", "gender": ""
@@ -103,27 +119,44 @@ def google_callback():
 
 # ------------------ Auth Routes ------------------
 
-@app.route("/api/signup", methods=["POST"])
+@app.route('/api/signup', methods=['POST'])
 def signup():
-    data = request.json
-    email, password, role = data.get("email"), data.get("password"), data.get("role", "patients")
-    if find_user(email, role):
-        return jsonify({"error": "User already exists"}), 409
-    users_db[role].append({"email": email, "password": password})
-    user_profiles[email] = {
-        "firstName": email.split('@')[0].capitalize(),
-        "lastName": "", "email": email, "phone": "", "birth": "", "gender": ""
-    }
-    return jsonify({"message": f"{role[:-1].capitalize()} signed up successfully ✅!"}), 201
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    role = data.get('role')
 
-@app.route("/api/signin", methods=["POST"])
+    if not email or not password or not role:
+        return jsonify({'message': 'Missing required fields'}), 400
+
+    existing_user = User.query.filter_by(email=email, role=role).first()
+    if existing_user:
+        return jsonify({'message': 'User already exists'}), 409
+
+    hashed_password = generate_password_hash(password)
+    new_user = User(email=email, password=hashed_password, role=role)
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'User registered successfully'}), 201
+
+@app.route('/api/signin', methods=['POST'])
 def signin():
-    data = request.json
-    email, password, role = data.get("email"), data.get("password"), data.get("role", "patients")
-    user = find_user(email, role)
-    if not user or user["password"] != password:
-        return jsonify({"error": "Invalid credentials"}), 401
-    return jsonify({"message": f"{role[:-1].capitalize()} signed in ✅", "user_id": email}), 200
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+    role = data.get('role')
+
+    user = User.query.filter_by(email=email, role=role).first()
+
+    if not user or not check_password_hash(user.password, password):
+        return jsonify({'message': 'Invalid credentials'}), 401
+
+    return jsonify({'message': 'Login successful', 'email': user.email, 'role': user.role}), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 # 🧠 Step handler (1–14)
 def handle_step(user_id, step_key, value):

@@ -66,19 +66,22 @@ const NewSignUp = ({ role }) => {
     setErrors(newErrors);
     const valid = !Object.values(newErrors).includes(true);
 
-    if (valid) {
-      try {
-        await axios.post('http://localhost:5000/api/signup', {
-          email: formData.email,
-          password: formData.password,
-          role: role || 'patients', // default to patient
-        });
-        alert('✅ Sign Up Successful!');
-        navigate('/signinas');
-      } catch (err) {
-        alert(err.response?.data?.error || "Something went wrong!");
-      }
-    }
+    const res = await axios.post('http://localhost:5000/api/signup', {
+  email: formData.email,
+  password: formData.password,
+  role: role || 'patient',
+});
+
+localStorage.setItem('user_id', res.data.email);
+localStorage.setItem('userEmail', res.data.email);
+localStorage.setItem('userRole', res.data.role);
+
+alert(res.data.message);
+
+if (res.data.role === 'therapist') navigate('/dashboard/therapist');
+else if (res.data.role === 'admin') navigate('/dashboard/admin');
+else navigate('/assessment/step1');
+
   };
 
   // Google OAuth signup

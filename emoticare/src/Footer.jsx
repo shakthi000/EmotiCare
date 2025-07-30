@@ -16,31 +16,31 @@ const Footer = () => {
         className={isActive('/dashboard/patient') ? 'active' : ''}
         onClick={() => navigate('/dashboard/patient')}
       >
-        😊
+        😊 <div>Dashboard</div>
       </button>
       <button
         className={isActive('/analytics/patient') ? 'active' : ''}
         onClick={() => navigate('/analytics/patient')}
       >
-        ❤
+        ❤ <div>Analytics</div>
       </button>
       <button
         className={isActive('/chooseai/patient') ? 'active' : ''}
         onClick={() => navigate('/chooseai/patient')}
       >
-        🧒
+        🧒 <div>Chat</div>
       </button>
       <button
         className={isActive('/resources/patient') ? 'active' : ''}
         onClick={() => navigate('/resources/patient')}
       >
-        🔋
+        🔋 <div>Resources</div>
       </button>
       <button
         className={isActive('/settings/patient') ? 'active' : ''}
         onClick={() => navigate('/settings/patient')}
       >
-        🏴
+        🏴 <div>Settings</div>
       </button>
     </div>
   );

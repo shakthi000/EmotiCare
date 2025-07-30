@@ -26,12 +26,16 @@ const SignInForm = ({ role }) => {
   const handleOAuthMessage = (event) => {
     console.log("OAuth message received:", event);
     // if (event.origin !== window.location.origin) return;
-    const { success, email } = event.data;
+    const { success, email, role } = event.data;
     if (success && email) {
       localStorage.setItem('user_id', email);
-      localStorage.setItem('userEmail', email);
-      localStorage.setItem('userRole', "patient");
-      window.location.href = window.location.origin + '/assessment/step1';
+localStorage.setItem('userEmail', email);
+localStorage.setItem('userRole', role);
+
+if (role === 'therapist') window.location.href = '/dashboard/therapist';
+else if (role === 'admin') window.location.href = '/dashboard/admin';
+else window.location.href = '/assessment/step1';
+
     }
   };
   window.addEventListener('message', handleOAuthMessage);
@@ -77,9 +81,14 @@ const SignInForm = ({ role }) => {
           role: role === 'admin' ? 'admins' : role + 's'
         });
 
-        localStorage.setItem('user_id', res.data.user_id);
-        localStorage.setItem('userEmail', res.data.user_id);
-        localStorage.setItem('userRole', role);
+        localStorage.setItem('user_id', res.data.email);
+        localStorage.setItem('userEmail', res.data.email);
+        localStorage.setItem('userRole', res.data.role);
+
+        if (res.data.role === 'patient') navigate('/assessment/step1');
+        else if (res.data.role === 'therapist') navigate('/dashboard/therapist');
+        else if (res.data.role === 'admin') navigate('/dashboard/admin');
+
 
         alert(res.data.message);
 
